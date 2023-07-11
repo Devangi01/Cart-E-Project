@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { useState, useContext } from 'react';
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating } from '@mui/material';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
@@ -33,43 +34,114 @@ export default function ShopProductCard({ product }) {
 
   const wishlist = mainState.wishlist;
   const cartlist = mainState.cartlist;
-  const isProductInWishlist = wishlist.some((product) => product.id === _id);
-  const isProductCartlist = cartlist.some((product) => product.id === _id);
+  const isProductInWishlist = wishlist.some((product) => product._id === _id);
+  const isProductCartlist = cartlist.some((product) => product._id === _id);
 
-  const handleIconClick = () => {
+  const encodedToken = localStorage.getItem('token');
+  const handleIconClick = async () => {
     if (isProductInWishlist) {
-      const updatedWishlist = wishlist.filter((product) => product.id !== _id);
-     const alertObject =  mainState.alertBox;
-     alertObject.text = title.concat(" removed from the wish list");
-     alertObject.type ="error";
-      setMainState({ ...mainState, wishlist: updatedWishlist, alertBox:alertObject });
+      debugger; // eslint-disable-line no-debugger
+      try {
+        const response = await axios.delete(`/api/user/wishlist/${_id}`, {
+          headers: {
+            authorization: encodedToken, // passing token as an authorization header
+          },
+        });
+        debugger; // eslint-disable-line no-debugger
+        if (response.status === 200) {
+          // const updatedWishlist = wishlist.filter((product) => product.id !== _id);
+          const alertObject = mainState.alertBox;
+          alertObject.text = title.concat(' removed from the wish list');
+          alertObject.type = 'error';
+          setMainState({ ...mainState, wishlist: response.data.wishlist, alertBox: alertObject });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      const alertObject =  mainState.alertBox;
-      alertObject.text = title.concat(" added to the wish list");
-      alertObject.type ="success";
-      const updatedWishlist = [...wishlist, { id: _id, title, price, category, img, rating }];
-      setMainState({ ...mainState, wishlist: updatedWishlist,alertBox:alertObject });
+      try {
+        const response = await axios.post(
+          `/api/user/wishlist`,
+          {
+            _id,
+            title,
+            price,
+            category,
+            img,
+            rating,
+          },
+          {
+            headers: {
+              authorization: encodedToken, // passing token as an authorization header
+            },
+          }
+        );
+        console.log(response);
+        if (response.status === 201) {
+          const alertObject = mainState.alertBox;
+          alertObject.text = title.concat(' added to the wish list');
+          alertObject.type = 'success';
+          setMainState({ ...mainState, wishlist: response.data.wishlist, alertBox: alertObject });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const handleCartClick = () => {
+  const handleCartClick = async () => {
     if (isProductCartlist) {
-      const alertObject =  mainState.alertBox;
-      alertObject.text = title.concat(" removed from the cart list");
-      alertObject.type ="error";
-      const updatedCartlist = cartlist.filter((product) => product.id !== _id);
-      setMainState({ ...mainState, cartlist: updatedCartlist,alertBox:alertObject });
+      debugger; // eslint-disable-line no-debugger
+      try {
+        const response = await axios.delete(`/api/user/cart/${_id}`, {
+          headers: {
+            authorization: encodedToken, // passing token as an authorization header
+          },
+        });
+        debugger; // eslint-disable-line no-debugger
+        if (response.status === 200) {
+          // const updatedWishlist = wishlist.filter((product) => product.id !== _id);
+          const alertObject = mainState.alertBox;
+          alertObject.text = title.concat(' removed from the cart list');
+          alertObject.type = 'error';
+          setMainState({ ...mainState, cartlist: response.data.cart, alertBox: alertObject });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      const alertObject =  mainState.alertBox;
-      alertObject.text = title.concat(" added to the cart list");
-      alertObject.type ="success";
-      const updatedCartlist = [...cartlist, { id: _id, title, price, category, img, rating, quantity: 1 }];
-      setMainState({ ...mainState, cartlist: updatedCartlist,alertBox:alertObject });
+      debugger; // eslint-disable-line no-debugger
+      try {
+        const response = await axios.post(
+          `/api/user/cart`,
+          {
+            _id,
+            title,
+            price,
+            category,
+            img,
+            rating,
+          },
+          {
+            headers: {
+              authorization: encodedToken, // passing token as an authorization header
+            },
+          }
+        );
+        console.log(response);
+        debugger; // eslint-disable-line no-debugger
+        if (response.status === 201) {
+          const alertObject = mainState.alertBox;
+          alertObject.text = title.concat(' added to the cart list');
+          alertObject.type = 'success';
+          setMainState({ ...mainState, cartlist: response.data.cart, alertBox: alertObject });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-
   };
 
-  
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -109,12 +181,12 @@ export default function ShopProductCard({ product }) {
                 <FavoriteBorderIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} />
               )}
               {isProductCartlist ? (
-                <ShoppingCartCheckoutIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer', color: 'darkblue' }} />
-              ) : (
-                <AddShoppingCartOutlinedIcon
+                <ShoppingCartCheckoutIcon
                   onClick={() => handleCartClick()}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', color: 'darkblue' }}
                 />
+              ) : (
+                <AddShoppingCartOutlinedIcon onClick={() => handleCartClick()} style={{ cursor: 'pointer' }} />
               )}
             </Stack>
           </Typography>
