@@ -1,4 +1,4 @@
-import React, { useState , useContext} from 'react';
+import React, { useState, useContext } from 'react';
 
 import { Helmet } from 'react-helmet-async';
 // @mui
@@ -9,14 +9,10 @@ import useResponsive from '../hooks/useResponsive';
 // components
 import Logo from '../components/logo';
 
-
 // sections
 import { LoginForm, SignUpForm } from '../sections/auth/login';
 
 import { MainContext } from '../context/MainContext';
-
-
-
 
 // ----------------------------------------------------------------------
 
@@ -46,32 +42,29 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-
-
 // ----------------------------------------------------------------------
 
-const LoginPage = ()=> {
+const LoginPage = () => {
   const mdUp = useResponsive('up', 'md');
 
   // const [mainState, setMainState] = useState({
   //   loginFalg :true
   // });
 
-  const {mainState, setMainState} = useContext(MainContext);
-  const handleClick = ()=>{
+  const { mainState, setMainState } = useContext(MainContext);
+  const handleClick = () => {
     setMainState({
-      ...mainState,loginFalg:!mainState.loginFalg
-    })
-  }
+      ...mainState,
+      loginFalg: !mainState.loginFalg,
+    });
+  };
   return (
     <>
       <Helmet>
-        <title> {mainState.loginFalg ? "Login" : "Sign Up"} |Cart-E Management </title>
+        <title> {mainState.loginFalg ? 'Login' : 'Sign Up'} |Cart-E Management </title>
       </Helmet>
 
       <StyledRoot>
-      
-
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
@@ -84,20 +77,22 @@ const LoginPage = ()=> {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-                   {mainState.loginFalg ? "Sign in" : "Sign up" }    to Cart-E
+              {mainState.loginFalg ? 'Sign in' : 'Sign up'} to Cart-E
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              {mainState.loginFalg ? "Don’t" : "Already"} have an account? {''}
-              <Link variant="subtitle2" style={{cursor:"pointer"}} onClick={()=>handleClick()}> {mainState.loginFalg ? "Get started":"Please Login"}</Link>
+              {mainState.loginFalg ? 'Don’t' : 'Already'} have an account? {''}
+              <Link variant="subtitle2" style={{ cursor: 'pointer' }} onClick={() => handleClick()}>
+                {' '}
+                {mainState.loginFalg ? 'Get started' : 'Please Login'}
+              </Link>
             </Typography>
 
-            { mainState.loginFalg ? <LoginForm /> : <SignUpForm /> }
-            
+            {mainState.loginFalg ? <LoginForm /> : <SignUpForm />}
           </StyledContent>
         </Container>
       </StyledRoot>
     </>
   );
-}
+};
 export default LoginPage;
