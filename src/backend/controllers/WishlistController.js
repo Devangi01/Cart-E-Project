@@ -1,5 +1,5 @@
-import { Response } from "miragejs";
-import { formatDate, requiresAuth } from "../utils/authUtils";
+import { Response } from 'miragejs';
+import { formatDate, requiresAuth } from '../utils/authUtils';
 
 /**
  * All the routes related to Wishlist are present here.
@@ -19,7 +19,7 @@ export const getWishlistItemsHandler = function (schema, request) {
       404,
       {},
       {
-        errors: ["The email you entered is not Registered. Not Found error"],
+        errors: ['The email you entered is not Registered. Not Found error'],
       }
     );
   }
@@ -41,14 +41,19 @@ export const addItemToWishlistHandler = function (schema, request) {
         404,
         {},
         {
-          errors: ["The email you entered is not Registered. Not Found error"],
+          errors: ['The email you entered is not Registered. Not Found error'],
         }
       );
     }
     const userWishlist = schema.users.findBy({ _id: userId }).wishlist;
-    const { product } = JSON.parse(request.requestBody);
+    const { _id, title, price, category, img, rating } = JSON.parse(request.requestBody);
     userWishlist.push({
-      ...product,
+      _id,
+      title,
+      price,
+      category,
+      img,
+      rating,
       createdAt: formatDate(),
       updatedAt: formatDate(),
     });
@@ -72,6 +77,7 @@ export const addItemToWishlistHandler = function (schema, request) {
  * */
 
 export const removeItemFromWishlistHandler = function (schema, request) {
+  debugger; // eslint-disable-line no-debugger
   const userId = requiresAuth.call(this, request);
   try {
     if (!userId) {
@@ -79,13 +85,14 @@ export const removeItemFromWishlistHandler = function (schema, request) {
         404,
         {},
         {
-          errors: ["The email you entered is not Registered. Not Found error"],
+          errors: ['The email you entered is not Registered. Not Found error'],
         }
       );
     }
     let userWishlist = schema.users.findBy({ _id: userId }).wishlist;
     const productId = request.params.productId;
-    userWishlist = userWishlist.filter((item) => item._id !== productId);
+    console.log(typeof productId);
+    userWishlist = userWishlist.filter((item) => item._id !== Number(productId));
     this.db.users.update({ _id: userId }, { wishlist: userWishlist });
     return new Response(200, {}, { wishlist: userWishlist });
   } catch (error) {
