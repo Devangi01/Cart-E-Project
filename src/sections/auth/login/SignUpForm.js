@@ -32,6 +32,8 @@ export default function SignUpForm() {
     setMainState({ ...mainState, alertBox: alertObject });
     try {
       const response = await axios.post(`/api/auth/signup`, {
+        firstname: signUpState.firstname,
+        lastname: signUpState.lastname,
         email: signUpState.email,
         password: signUpState.password,
       });

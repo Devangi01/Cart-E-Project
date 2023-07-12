@@ -42,7 +42,6 @@ export default function LoginForm() {
           authorization: encodedToken, // passing token as an authorization header
         },
       });
-      console.log('loginResponse', response.email);
       // saving the encodedToken in the localStorage
       // if(response.status){
       //   alert(response.status);
@@ -54,7 +53,7 @@ export default function LoginForm() {
         const alertObject = mainState.alertBox;
         alertObject.text = 'Login Successfull';
         alertObject.type = 'success';
-        setMainState({ ...mainState, isLoggedIn: true, alertBox: alertObject }); // Update isLoggedIn state in MainContext
+        setMainState({ ...mainState, isLoggedIn: true, loggedUserInfo: response.data.foundUser }); // Update isLoggedIn state in MainContext
         navigate('/dashboard', { replace: true });
       }
     } catch (error) {
