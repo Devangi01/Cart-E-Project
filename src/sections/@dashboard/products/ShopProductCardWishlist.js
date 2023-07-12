@@ -52,6 +52,10 @@ export default function ShopProductCardWishlist({ product }) {
   };
 
   const handleCartClick = async () => {
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = '';
+    setMainState({ ...mainState, alertBox: alertObject });
     if (isProductCartlist) {
       debugger; // eslint-disable-line no-debugger
       try {
@@ -70,6 +74,10 @@ export default function ShopProductCardWishlist({ product }) {
         }
       } catch (error) {
         console.log(error);
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     } else {
       debugger; // eslint-disable-line no-debugger
@@ -100,6 +108,10 @@ export default function ShopProductCardWishlist({ product }) {
         }
       } catch (error) {
         console.log(error);
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     }
   };

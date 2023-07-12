@@ -26,6 +26,10 @@ export default function SignUpForm() {
 
   const { mainState, setMainState } = useContext(MainContext);
   const handleClick = async () => {
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = 'error';
+    setMainState({ ...mainState, alertBox: alertObject });
     try {
       const response = await axios.post(`/api/auth/signup`, {
         email: signUpState.email,
@@ -41,6 +45,10 @@ export default function SignUpForm() {
       }
     } catch (error) {
       console.log(error);
+      const alertObject = mainState.alertBox;
+      alertObject.text = 'This email is already exits!';
+      alertObject.type = 'error';
+      setMainState({ ...mainState, alertBox: alertObject });
     }
   };
 

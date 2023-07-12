@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 // Adjust the file path accordingly
 
 // @mui
-import { Container, Stack, Typography, Box, Grid, Table, TextField, Button, Model } from '@mui/material';
+import { Container, Stack, Typography, Box, Grid, Table, TextField, Button, Model, Snackbar } from '@mui/material';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -64,21 +65,41 @@ export default function Cartlist() {
     p: 4,
   };
   const [open, setOpen] = useState(false);
+  const [alertOpen, setalertOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  useEffect(() => {
+    if (mainState.alertBox.text !== '') {
+      setalertOpen(true);
+    }
+  }, [mainState.alertBox.text]);
 
   const handleRadioButtonClick = (event) => {};
   const handlePlaceOrderClick = () => {
+    debugger; // eslint-disable-line no-debugger
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = '';
+    setMainState({ ...mainState, alertBox: alertObject });
     if (mainState.saveAddressData.length > 0) {
-      alert('Your order is placed successfull');
+      const alertObject = mainState.alertBox;
+      alertObject.text = 'Your order place successfull';
+      alertObject.type = 'success';
+      setMainState({ ...mainState, alertBox: alertObject });
       setOpen(false);
     } else {
-      alert('Please add the address details');
+      const alertObject = mainState.alertBox;
+      alertObject.text = 'Please add the address details';
+      alertObject.type = 'error';
+      setMainState({ ...mainState, alertBox: alertObject });
     }
   };
   useEffect(() => {
     // Calculate total sum
-
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = '';
+    setMainState({ ...mainState, alertBox: alertObject });
     const sum = mainState.cartlist.reduce((total, row) => total + Number(row.price) * Number(row.qty), 0);
     const per = (10 / 100) * sum;
     const totalAmount = sum + per;
@@ -95,18 +116,19 @@ export default function Cartlist() {
   };
   const saveAddress = () => {
     setMainState({ ...mainState, saveAddressData: [...mainState.saveAddressData, mainState.address] });
-
-    //  setMainState({ ...mainState, address: { id: uuid(), firstName: '', lastName: '', addDetails: '' } })
-
-    // setsaveData([...saveData, address]);
-    // setAddress({
-    //   id: uuid(),
-    //   firstName: '',
-    //   lastName: '',
-    //   addDetails: ''
-    // })
   };
 
+  const Alert = React.forwardRef((props, ref) => {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setalertOpen(false);
+  };
+
+  const ref = React.createRef();
   const handleEditDeleteButton = (id, buttonType) => {
     if (buttonType === 'Edit') {
       const tempData = mainState.saveAddressData.filter((data) => data.id === id);
@@ -282,11 +304,11 @@ export default function Cartlist() {
         >
           <Box sx={style}>
             <Box>
-              <Grid container spacing={2}>
+              <Grid container>
                 <Grid item xs={7}>
                   <Box
                     sx={{
-                      width: 500,
+                      width: '95%',
                       height: 350,
 
                       borderRadius: 4,
@@ -294,18 +316,31 @@ export default function Cartlist() {
                       p: 2,
                     }}
                   >
+                    <Snackbar open={alertOpen} autoHideDuration={6000}>
+                      <Alert severity={mainState.alertBox.type} sx={{ width: '100%' }}>
+                        {mainState.alertBox.text}
+                      </Alert>
+                    </Snackbar>
+
+                    <Snackbar open={alertOpen} autoHideDuration={2000} onClose={handleAlertClose}>
+                      <Alert onClose={handleAlertClose} severity={mainState.alertBox.type} sx={{ width: '100%' }}>
+                        {mainState.alertBox.text}
+                      </Alert>
+                    </Snackbar>
                     <Typography variant="h6" align="center">
                       Order Summury
                     </Typography>
 
                     <Box
                       sx={{
-                        width: 470,
+                        width: '100%',
                         height: 200,
                         borderRadius: 2,
                         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
                       }}
                     >
+
+                      
                       <TableContainer style={{ maxHeight: 200, overflowY: 'auto' }} component={Paper}>
                         <Table stickyHeader size="small" aria-label="a dense table">
                           <TableHead>
@@ -332,8 +367,8 @@ export default function Cartlist() {
                       </TableContainer>
                     </Box>
                     <Grid container style={{ padding: '5px' }} spacing={2}>
-                      <Grid item xs={5} />
-                      <Grid item xs={7}>
+                      <Grid item xs={6} />
+                      <Grid item xs={6}>
                         <Grid container>
                           <Grid item xs={5}>
                             <Typography align="right" sx={{ mt: 0.4, mr: 0.2 }}>
@@ -359,6 +394,51 @@ export default function Cartlist() {
                         <Button sx={{ mt: 2 }} onClick={() => handlePlaceOrderClick()} variant="outlined">
                           Place Order
                         </Button>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                  <Box style={{ marginTop: '20px' }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={9}>
+                        <Typography variant="h6" align="left">
+                          Address Details
+                        </Typography>
+                        <Stack spacing={2} direction="row">
+                          <TextField
+                            size="small"
+                            name="firstName"
+                            value={mainState.address.firstName}
+                            onChange={(event) => handleChange(event)}
+                            id="outlined-basic"
+                            label="First name"
+                            variant="outlined"
+                          />
+                          <TextField
+                            id="outlined-basic"
+                            value={mainState.address.lastName}
+                            name="lastName"
+                            size="small"
+                            label="Last name"
+                            onChange={(event) => handleChange(event)}
+                            variant="outlined"
+                          />
+                        </Stack>
+                        <Stack sx={{ mt: 2 }}>
+                          <TextField
+                            placeholder="Enter The Address Details"
+                            multiline
+                            rows={2}
+                            maxRows={4}
+                            name="addDetails"
+                            value={mainState.address.addDetails}
+                            onChange={(event) => handleChange(event)}
+                          />
+                        </Stack>
+                        <Stack>
+                          <Button sx={{ mt: 2 }} onClick={() => saveAddress()} variant="outlined">
+                            Save Address
+                          </Button>
+                        </Stack>
                       </Grid>
                     </Grid>
                   </Box>
@@ -458,51 +538,6 @@ export default function Cartlist() {
                       </RadioGroup>
                     </FormControl>
                   </Box>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box style={{ marginTop: '20px' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={5}>
-                  <Typography variant="h6" align="left">
-                    Address Details
-                  </Typography>
-                  <Stack spacing={2} direction="row">
-                    <TextField
-                      size="small"
-                      name="firstName"
-                      value={mainState.address.firstName}
-                      onChange={(event) => handleChange(event)}
-                      id="outlined-basic"
-                      label="First name"
-                      variant="outlined"
-                    />
-                    <TextField
-                      id="outlined-basic"
-                      value={mainState.address.lastName}
-                      name="lastName"
-                      size="small"
-                      label="Last name"
-                      onChange={(event) => handleChange(event)}
-                      variant="outlined"
-                    />
-                  </Stack>
-                  <Stack sx={{ mt: 2 }}>
-                    <TextField
-                      placeholder="Enter The Address Details"
-                      multiline
-                      rows={2}
-                      maxRows={4}
-                      name="addDetails"
-                      value={mainState.address.addDetails}
-                      onChange={(event) => handleChange(event)}
-                    />
-                  </Stack>
-                  <Stack>
-                    <Button sx={{ mt: 2 }} onClick={() => saveAddress()} variant="outlined">
-                      Save Address
-                    </Button>
-                  </Stack>
                 </Grid>
               </Grid>
             </Box>

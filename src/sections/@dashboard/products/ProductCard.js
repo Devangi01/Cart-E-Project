@@ -39,8 +39,11 @@ export default function ShopProductCard({ product }) {
 
   const encodedToken = localStorage.getItem('token');
   const handleIconClick = async () => {
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = '';
+    setMainState({ ...mainState, alertBox: alertObject });
     if (isProductInWishlist) {
-      debugger; // eslint-disable-line no-debugger
       try {
         const response = await axios.delete(`/api/user/wishlist/${_id}`, {
           headers: {
@@ -56,7 +59,13 @@ export default function ShopProductCard({ product }) {
           setMainState({ ...mainState, wishlist: response.data.wishlist, alertBox: alertObject });
         }
       } catch (error) {
+        debugger; // eslint-disable-line no-debugger
         console.log(error);
+
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     } else {
       try {
@@ -84,12 +93,21 @@ export default function ShopProductCard({ product }) {
           setMainState({ ...mainState, wishlist: response.data.wishlist, alertBox: alertObject });
         }
       } catch (error) {
+        debugger; // eslint-disable-line no-debugger
         console.log(error);
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     }
   };
 
   const handleCartClick = async () => {
+    const alertObject = mainState.alertBox;
+    alertObject.text = '';
+    alertObject.type = '';
+    setMainState({ ...mainState, alertBox: alertObject });
     if (isProductCartlist) {
       debugger; // eslint-disable-line no-debugger
       try {
@@ -108,6 +126,10 @@ export default function ShopProductCard({ product }) {
         }
       } catch (error) {
         console.log(error);
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     } else {
       debugger; // eslint-disable-line no-debugger
@@ -138,6 +160,10 @@ export default function ShopProductCard({ product }) {
         }
       } catch (error) {
         console.log(error);
+        const alertObject = mainState.alertBox;
+        alertObject.text = 'Please login with valid credential';
+        alertObject.type = 'error';
+        setMainState({ ...mainState, alertBox: alertObject });
       }
     }
   };
