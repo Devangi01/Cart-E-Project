@@ -49,16 +49,18 @@ export default function LoginForm() {
         },
         
       });
-      console.log("loginResponse",response.email)
       // saving the encodedToken in the localStorage
       // if(response.status){
       //   alert(response.status);
       //   localStorage.setItem("token", response.data.encodedToken);
        
       // }
+      debugger; // eslint-disable-line no-debugger
       if(response.status === 200){
+        debugger; // eslint-disable-line no-debugger
+
         localStorage.setItem("token", response.data.encodedToken);
-        setMainState({ ...mainState, isLoggedIn: true }); // Update isLoggedIn state in MainContext
+        setMainState({ ...mainState, isLoggedIn: true , loggedUserInfo: response.data.foundUser}); // Update isLoggedIn state in MainContext
            navigate('/dashboard', { replace: true });
   
       }

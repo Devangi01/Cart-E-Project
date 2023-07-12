@@ -26,7 +26,8 @@ export const MainProvider = ({ children }) => {
       lastName: '',
       addDetails: ''
     },
-    saveAddressData: []
+    saveAddressData: [],
+    loggedUserInfo: {}
 
   });
 

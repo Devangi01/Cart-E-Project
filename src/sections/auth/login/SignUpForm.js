@@ -28,6 +28,8 @@ export default function SignUpForm() {
   const handleClick = async () => {
     try {
       const response = await axios.post(`/api/auth/signup`, {
+        firstname: signUpState.firstname,
+        lastname: signUpState.lastname,
         email: signUpState.email,
         password: signUpState.password,
       });

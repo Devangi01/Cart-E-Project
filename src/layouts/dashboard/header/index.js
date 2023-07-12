@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Snackbar } from '@mui/material';
-import MuiAlert, { AlertProps } from "@mui/material/Alert"
+import MuiAlert from "@mui/material/Alert"
 // import MuiAlert from '@mui/material/Alert';
 // utils
 import { MainContext } from '../../../context/MainContext';
@@ -13,7 +13,7 @@ import { bgBlur } from '../../../utils/cssStyles';
 import Iconify from '../../../components/iconify';
 //
 import Searchbar from './Searchbar';
-import AccountPopover from './AccountPopover';
+// import AccountPopover from './AccountPopover';
 
 
 
@@ -73,7 +73,7 @@ export default function Header({ onOpenNav }) {
 
   }, [mainState.alertBox.text]);
 
-  const ref = React.createRef();
+  // const ref = React.createRef();
   // const handleClose = (event, reason) => {
   //   if (reason === 'clickaway') {
   //     return;
@@ -122,7 +122,7 @@ export default function Header({ onOpenNav }) {
           {/* <NotificationsPopover /> */}
 
 
-          <AccountPopover />
+          {/* <AccountPopover /> */}
         </Stack>
 
       </StyledToolbar>

@@ -8,7 +8,7 @@ import { AppWidgetSummary } from '../sections/@dashboard/app';
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
   position: 'relative',
-  padding: theme.spacing(2),
+  // padding: theme.spacing(2),
   '&:hover': {
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.1)',
     cursor: 'pointer',
@@ -26,6 +26,8 @@ const StyledProductImg = styled('img')({
 const CategorySection = styled(Grid)(({ theme }) => ({
   marginBottom: theme.spacing(4),
   overflow: 'hidden',
+  height: '330px', // Set a specific height for the container
+  // backgroundSize:'cover'
 }));
 
 export default function DashboardAppPage() {
@@ -36,22 +38,21 @@ export default function DashboardAppPage() {
       </Helmet>
 
       <Container fixed>
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 2 }}>
           Hi, Welcome back
         </Typography>
 
         <CategorySection container>
-          <Grid item xs={12}  >
-            {/* Add your big image here */}
+          <Grid item xs={12} >
             <img
-              src="/assets/images/products/e-commerce.jpg"
+              src="/assets/images/products/ec2.jpg"
               alt=""
               style={{
-                maxWidth: '600px',
-                maxHeight: '600px', // Adjust the value to your desired height
-                // width: 'auto',
-                // height: 'auto',
-                objectFit: 'contain',
+                minWidth: '10px',
+                minHeight: '10px',
+                width: 'auto',
+                height: 'auto',
+                objectFit: "cover"
               }}
             />
           </Grid>
