@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating } from '@mui/material';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -27,6 +28,7 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product }) {
   const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
+  const navigate = useNavigate();
 
   const [mainProductCardState, setMainProductCardState] = useState({
     addToCartIconFlag: true,
@@ -168,6 +170,10 @@ export default function ShopProductCard({ product }) {
     }
   };
 
+  const handleLink = () => {
+    navigate(`/dashboard/singleProduct/${_id}`);
+  };
+
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -190,7 +196,7 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" href={`singleProduct/${_id}`}>
+        <Link color="inherit" underline="hover" onClick={() => handleLink()}>
           <Typography variant="subtitle2" style={{ cursor: 'pointer' }} noWrap>
             {title}
           </Typography>
@@ -217,7 +223,6 @@ export default function ShopProductCard({ product }) {
             </Stack>
           </Typography>
         </Stack>
-
         <Stack>
           <FormControlLabel
             key={rating}
