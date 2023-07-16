@@ -196,8 +196,8 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" onClick={() => handleLink()}>
-          <Typography variant="subtitle2" style={{ cursor: 'pointer' }} noWrap>
+        <Link color="inherit" underline="hover" style={{ cursor: 'pointer' }} onClick={() => handleLink()}>
+          <Typography variant="subtitle2"  noWrap>
             {title}
           </Typography>
         </Link>

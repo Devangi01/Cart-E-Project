@@ -1,6 +1,8 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Card, Link, Typography, Stack, Radio, FormControlLabel, Rating } from '@mui/material';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
@@ -30,6 +32,8 @@ export default function ShopProductCardWishlist({ product }) {
   const cartlist = mainState.cartlist;
   const isProductCartlist = cartlist.some((cartProduct) => cartProduct._id === _id);
   const encodedToken = localStorage.getItem('token');
+  const navigate = useNavigate();
+
 
   const handleIconClick = async () => {
     try {
@@ -116,6 +120,10 @@ export default function ShopProductCardWishlist({ product }) {
     }
   };
 
+  const handleLink = () => {
+    navigate(`/dashboard/singleProduct/${_id}`);
+  };
+
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -138,7 +146,7 @@ export default function ShopProductCardWishlist({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" href={`singleProduct/${_id}`}>
+        <Link color="inherit" underline="hover" style={{ cursor: 'pointer' }} onClick={() => handleLink()}>
           <Typography variant="subtitle2" style={{ cursor: 'pointer' }} noWrap>
             {title}
           </Typography>
