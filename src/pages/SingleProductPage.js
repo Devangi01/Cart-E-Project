@@ -10,11 +10,11 @@ const SingleProductPage = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      debugger; // eslint-disable-line no-debugger
+      //  debugger; // eslint-disable-line no-debugger
       try {
         const response = await axios.get(`/api/products/${id}`);
-        console.log("Single Product Response", response);
-  
+        console.log('Single Product Response', response);
+
         setProduct(response.data.product);
       } catch (error) {
         console.log(error);
@@ -22,19 +22,20 @@ const SingleProductPage = () => {
     };
 
     fetchProduct();
-  });
+  }, [id]);
 
-  debugger; // eslint-disable-line no-debugger
   // const { title, price, category, img, rating, _id } = product;
   const { mainState, setMainState } = useContext(MainContext);
   const [mainProductCardState, setMainProductCardState] = useState({
     addToCartIconFlag: true,
   });
 
+  console.log('In Single Product Page', mainState);
   const wishlist = mainState.wishlist;
   const cartlist = mainState.cartlist;
-  const isProductInWishlist = wishlist.some((productData) => productData._id === id);
-  const isProductCartlist = cartlist.some((productData) => productData._id === id);
+  const isProductInWishlist = wishlist.some((productData) => productData._id === Number(id));
+  const isProductCartlist = cartlist.some((productData) => productData._id === Number(id));
+  // debugger; // eslint-disable-line no-debugger
 
   const encodedToken = localStorage.getItem('token');
   const handleIconClick = async () => {
@@ -49,7 +50,7 @@ const SingleProductPage = () => {
             authorization: encodedToken, // passing token as an authorization header
           },
         });
-        debugger; // eslint-disable-line no-debugger
+        //     debugger; // eslint-disable-line no-debugger
         if (response.status === 200) {
           // const updatedWishlist = wishlist.filter((product) => product.id !== _id);
           const alertObject = mainState.alertBox;
@@ -71,12 +72,12 @@ const SingleProductPage = () => {
         const response = await axios.post(
           `/api/user/wishlist`,
           {
-            _id:product._id,
-            title:product.title,
-            price:product.price,
-            category:product.category,
-            img:product.img,
-            rating:product.rating,
+            _id: product._id,
+            title: product.title,
+            price: product.price,
+            category: product.category,
+            img: product.img,
+            rating: product.rating,
           },
           {
             headers: {
@@ -92,7 +93,7 @@ const SingleProductPage = () => {
           setMainState({ ...mainState, wishlist: response.data.wishlist, alertBox: alertObject });
         }
       } catch (error) {
-        debugger; // eslint-disable-line no-debugger
+        //   debugger; // eslint-disable-line no-debugger
         console.log(error);
         const alertObject = mainState.alertBox;
         alertObject.text = 'Please login with valid credential';
@@ -108,14 +109,14 @@ const SingleProductPage = () => {
     alertObject.type = '';
     setMainState({ ...mainState, alertBox: alertObject });
     if (isProductCartlist) {
-      debugger; // eslint-disable-line no-debugger
+      //  debugger; // eslint-disable-line no-debugger
       try {
         const response = await axios.delete(`/api/user/cart/${product._id}`, {
           headers: {
             authorization: encodedToken, // passing token as an authorization header
           },
         });
-        debugger; // eslint-disable-line no-debugger
+        //    debugger; // eslint-disable-line no-debugger
         if (response.status === 200) {
           // const updatedWishlist = wishlist.filter((product) => product.id !== _id);
           const alertObject = mainState.alertBox;
@@ -131,18 +132,17 @@ const SingleProductPage = () => {
         setMainState({ ...mainState, alertBox: alertObject });
       }
     } else {
-      debugger; // eslint-disable-line no-debugger
+      //      debugger; // eslint-disable-line no-debugger
       try {
         const response = await axios.post(
           `/api/user/cart`,
           {
-            
-            _id:product._id,
-            title:product.title,
-            price:product.price,
-            category:product.category,
-            img:product.img,
-            rating:product.rating,
+            _id: product._id,
+            title: product.title,
+            price: product.price,
+            category: product.category,
+            img: product.img,
+            rating: product.rating,
           },
           {
             headers: {
@@ -151,7 +151,7 @@ const SingleProductPage = () => {
           }
         );
         console.log(response);
-        debugger; // eslint-disable-line no-debugger
+        //     debugger; // eslint-disable-line no-debugger
         if (response.status === 201) {
           const alertObject = mainState.alertBox;
           alertObject.text = product.title.concat(' added to the cart list');
@@ -221,11 +221,22 @@ const SingleProductPage = () => {
               }}
             />
             <Stack style={{ display: 'flex', flexDirection: 'row' }}>
-              <Button onClick={()=>handleIconClick()} variant="contained" color= {isProductInWishlist ? "error":"primary"} sx={{ mb: 2 }}>
-            {isProductInWishlist ?"Remove from wishlist" : "Add to wishlist" }
+              <Button
+                onClick={() => handleIconClick()}
+                variant="contained"
+                color={isProductInWishlist ? 'error' : 'primary'}
+                sx={{ mb: 2 }}
+              >
+                {isProductInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
               </Button>
-              <Button onClick={()=>handleCartClick()} variant="contained" color={isProductCartlist ? "error":"primary"} sx={{ mb: 2, ml: 2 }}>
-              {isProductCartlist ?"Remove from cartlist" : "Add to cartlist" }              </Button>
+              <Button
+                onClick={() => handleCartClick()}
+                variant="contained"
+                color={isProductCartlist ? 'error' : 'primary'}
+                sx={{ mb: 2, ml: 2 }}
+              >
+                {isProductCartlist ? 'Remove from cartlist' : 'Add to cartlist'}{' '}
+              </Button>
             </Stack>
           </>
         )}

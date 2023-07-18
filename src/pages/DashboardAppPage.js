@@ -1,12 +1,14 @@
 import { useContext, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
+import SimpleImageSlider from 'react-simple-image-slider';
 import { Grid, Container, Typography, Paper, Box } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import StoreIcon from '@mui/icons-material/Store';
 import { MainContext } from '../context/MainContext';
 import { AppWidgetSummary } from '../sections/@dashboard/app';
+import './CSS/dashboard.css';
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
   position: 'relative',
@@ -52,6 +54,18 @@ const StyledContainer = styled(Container)({
 export default function DashboardAppPage() {
   const { mainState, setMainState } = useContext(MainContext);
   const [imageHovered, setImageHovered] = useState(false);
+  const [imageNum, setImageNum] = useState(1);
+  const sliderImages = [
+    {
+      url: '/assets/images/1.png',
+    },
+    {
+      url: '/assets/images/bg-2.jpg',
+    },
+    {
+      url: '/assets/images/bg-7.jpg',
+    },
+  ];
 
   const handleImageMouseEnter = () => {
     setImageHovered(true);
@@ -67,92 +81,25 @@ export default function DashboardAppPage() {
         <title>Cart-E | Dashboard</title>
       </Helmet>
 
-      <StyledContainer fixed>
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          {mainState.isLoggedIn
-            ? `Hi, Welcome ${mainState.loggedUserInfo.firstname}`
-            : 'Hi, Welcome back'}
-        </Typography>
-
-        <CategorySection
-          container
-          onMouseEnter={handleImageMouseEnter}
-          onMouseLeave={handleImageMouseLeave}
-        >
-          <Grid item xs={12}>
-            <StyledProductImg
-              alt=""
-              src="/assets/images/products/e-commerce.jpg"
-              style={{
-                filter: imageHovered ? 'brightness(70%)' : 'none',
+      <Box>
+        <Grid container>
+          <Grid item>
+            {' '}
+            <SimpleImageSlider
+              width="82%"
+              height="80%"
+              images={sliderImages}
+              showBullets
+              showNavs
+              autoPlay
+              onStartSlide={(index, length) => {
+                setImageNum(index);
               }}
+              autoPlayDelay={3}
             />
           </Grid>
-        </CategorySection>
-
-        <Grid container spacing={3}>
-          <StyledGridItem
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            component={Paper}
-            onMouseEnter={handleImageMouseEnter}
-            onMouseLeave={handleImageMouseLeave}
-          >
-            <StyledProductImg
-              alt="clothes"
-              src="/assets/images/products/product_17.jpg"
-            />
-            {/* <AppWidgetSummary title="Clothes" total={714000} /> */}
-          </StyledGridItem>
-
-          <StyledGridItem
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            component={Paper}
-            onMouseEnter={handleImageMouseEnter}
-            onMouseLeave={handleImageMouseLeave}
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <ShoppingCartIcon sx={{ fontSize: 60, color: '#F67088' }} />
-            </Box>
-            {/* <AppWidgetSummary title="Orders" total={1352831} color="info" /> */}
-          </StyledGridItem>
-
-          <StyledGridItem
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            component={Paper}
-            onMouseEnter={handleImageMouseEnter}
-            onMouseLeave={handleImageMouseLeave}
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <StoreIcon sx={{ fontSize: 60, color: '#F8B64C' }} />
-            </Box>
-            <AppWidgetSummary title="Stores" total={1723315} color="warning" />
-          </StyledGridItem>
-
-          <StyledGridItem
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            component={Paper}
-            onMouseEnter={handleImageMouseEnter}
-            onMouseLeave={handleImageMouseLeave}
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <LocalMallIcon sx={{ fontSize: 60, color: '#32AB64' }} />
-            </Box>
-            <AppWidgetSummary title="Revenue" total={2539123} color="success" />
-          </StyledGridItem>
         </Grid>
-      </StyledContainer>
+      </Box>
     </>
   );
 }
