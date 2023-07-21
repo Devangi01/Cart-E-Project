@@ -73,7 +73,6 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
 
   useEffect(() => {
     jumpToProcessFilterFunction();
-    alert('call');
   }, []);
 
   const handleChange = (event, name) => {
