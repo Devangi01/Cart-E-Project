@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useContext,useEffect,useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // @mui
 import {
   Box,
@@ -38,7 +38,6 @@ export const FILTER_PRICE_OPTIONS = ['low to high', 'high to low'];
 export const FILTER_CATEGORY_OPTIONS = ['All', 'Shoes', 'Clothes', 'Jewellery'];
 export const FILTER_RATING_OPTIONS = ['4', '3', '2', '1'];
 
-
 // ----------------------------------------------------------------------
 
 ShopFilterSidebar.propTypes = {
@@ -48,49 +47,60 @@ ShopFilterSidebar.propTypes = {
 };
 
 export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFilter }) {
-  
   const { mainState, setMainState } = useContext(MainContext);
-  
-  function jumpToProcessFilterFunction(){
-    const finalFilterData =  filterRecord(mainState.storeOriginalProductData,mainState.filterState);
-    setMainState({...mainState,productData:finalFilterData})
+
+  function jumpToProcessFilterFunction() {
+    debugger; // eslint-disable-line no-debugger
+    const finalFilterData = filterRecord(mainState.storeOriginalProductData, mainState.filterState);
+    setMainState({ ...mainState, productData: finalFilterData });
   }
 
-
-  function filterRecord(inputArray,filterObject){
-   let filterData = [];
-   if(filterObject.category.includes("all")){
-    filterData =   inputArray.filter((eachObject)=> eachObject.rating >= filterObject.rating);
-   }else{
-    filterData =   inputArray.filter((eachObject)=> filterObject.category.includes(eachObject.category) && eachObject.rating >= filterObject.rating);
-
-   }
-   const sortingData =  filterObject.price === "low to high" ? filterData.sort((a,b)=>a.price - b.price) : filterData.sort((a,b)=>b.price - a.price);
-   return sortingData;
+  function filterRecord(inputArray, filterObject) {
+    let filterData = [];
+    if (filterObject.category.includes('all')) {
+      filterData = inputArray.filter((eachObject) => eachObject.rating >= filterObject.rating);
+    } else {
+      filterData = inputArray.filter(
+        (eachObject) => filterObject.category.includes(eachObject.category) && eachObject.rating >= filterObject.rating
+      );
+    }
+    const sortingData =
+      filterObject.price === 'low to high'
+        ? filterData.sort((a, b) => a.price - b.price)
+        : filterData.sort((a, b) => b.price - a.price);
+    return sortingData;
   }
+
+  useEffect(() => {
+    jumpToProcessFilterFunction();
+    alert('call');
+  }, []);
 
   const handleChange = (event, name) => {
-  name = name.toLowerCase();
+    name = name.toLowerCase();
     const getFilterObject = mainState.filterState;
-    if(name==="category" && event.target.checked){
-      getFilterObject[name]=[...getFilterObject[name],event.target.value.toLowerCase()];
-    }else if(name==="category" && event.target.checked === false){
+    if (name === 'category' && event.target.checked) {
+      getFilterObject[name] = [...getFilterObject[name], event.target.value.toLowerCase()];
+    } else if (name === 'category' && event.target.checked === false) {
       getFilterObject[name] = getFilterObject[name].filter((data) => data !== event.target.value.toLowerCase());
-    } 
-    else{
-      getFilterObject[name]=event.target.value;
+    } else {
+      getFilterObject[name] = event.target.value;
     }
     setMainState({ ...mainState, getFilterObject });
     jumpToProcessFilterFunction();
   };
-  
-  const handleClearFilter = ()=>{
-    setMainState({...mainState, productData:mainState.storeOriginalProductData,filterState:{
-      category:[],
-        price:"",
-        rating:""
-    }})
-  }
+
+  const handleClearFilter = () => {
+    setMainState({
+      ...mainState,
+      productData: mainState.storeOriginalProductData,
+      filterState: {
+        category: [],
+        price: '',
+        rating: '',
+      },
+    });
+  };
 
   return (
     <>
@@ -121,13 +131,19 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
           <Stack spacing={3} sx={{ p: 3 }}>
             <div>
               <Typography variant="subtitle1" gutterBottom>
-              Category
+                Category
               </Typography>
               <FormGroup>
                 {FILTER_CATEGORY_OPTIONS.map((item) => (
                   <FormControlLabel
                     key={item}
-                    control={<Checkbox value={item} checked={mainState.filterState.category.includes(item.toLowerCase())} onChange={(event) => handleChange(event, 'Category')} />}
+                    control={
+                      <Checkbox
+                        value={item}
+                        checked={mainState.filterState.category.includes(item.toLowerCase())}
+                        onChange={(event) => handleChange(event, 'Category')}
+                      />
+                    }
                     label={item}
                   />
                 ))}
@@ -136,14 +152,20 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
 
             <div>
               <Typography variant="subtitle1" gutterBottom>
-              Price
+                Price
               </Typography>
               <RadioGroup>
                 {FILTER_PRICE_OPTIONS.map((item) => (
                   <FormControlLabel
                     key={item}
-                    value={mainState.filterState.price}  
-                    control={<Radio value={item} checked={mainState.filterState.price===item} onChange={(event) => handleChange(event, 'Price')} />}
+                    value={mainState.filterState.price}
+                    control={
+                      <Radio
+                        value={item}
+                        checked={mainState.filterState.price === item}
+                        onChange={(event) => handleChange(event, 'Price')}
+                      />
+                    }
                     label={item}
                   />
                 ))}
@@ -163,7 +185,7 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
                 min={1}
                 max={5}
                 onChange={(event) => handleChange(event, 'Rating')}
-                />
+              />
             </div>
           </Stack>
         </Scrollbar>
@@ -175,7 +197,7 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
             type="submit"
             color="inherit"
             variant="outlined"
-            onClick={()=>handleClearFilter()}
+            onClick={() => handleClearFilter()}
             startIcon={<Iconify icon="ic:round-clear-all" />}
           >
             Clear All

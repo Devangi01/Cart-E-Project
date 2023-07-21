@@ -339,8 +339,6 @@ export default function Cartlist() {
                         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
                       }}
                     >
-
-                      
                       <TableContainer style={{ maxHeight: 200, overflowY: 'auto' }} component={Paper}>
                         <Table stickyHeader size="small" aria-label="a dense table">
                           <TableHead>

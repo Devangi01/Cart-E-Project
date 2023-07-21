@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Navigate, useRoutes , useLocation,useNavigate} from 'react-router-dom';
+import { Navigate, useRoutes, useLocation, useNavigate } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
@@ -14,11 +14,10 @@ import SingleProductPage from './pages/SingleProductPage';
 import Cartlist from './pages/CartlistPage';
 import { MainContext } from './context/MainContext';
 
-
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const {mainState} = useContext(MainContext)
+  const { mainState } = useContext(MainContext);
   const routes = useRoutes([
     {
       path: '/dashboard',
@@ -31,14 +30,9 @@ export default function Router() {
         { path: 'wishlist', element: <WishlistPage /> },
         {
           path: 'cart',
-          element: mainState.isLoggedIn ? (
-            <Cartlist />
-          ) : (
-            <Navigate to="/login" />
-          ),
+          element: mainState.isLoggedIn ? <Cartlist /> : <Navigate to="/login" />,
         },
         { path: 'singleProduct/:id', element: <SingleProductPage /> },
-        
       ],
     },
     {

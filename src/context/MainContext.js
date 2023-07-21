@@ -1,12 +1,12 @@
 import React, { createContext, useState } from 'react';
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export const MainContext = createContext();
 
 export const MainProvider = ({ children }) => {
   const [mainState, setMainState] = useState({
     filterState: {
-      category: [],
+      category: ['shoes'],
       price: '',
       rating: '',
     },
@@ -16,22 +16,19 @@ export const MainProvider = ({ children }) => {
     cartlist: [],
     isLoggedIn: false,
     alertBox: {
-      text: "",
-      type: ""
+      text: '',
+      type: '',
     },
     loginFalg: true,
     address: {
       id: '',
       firstName: '',
       lastName: '',
-      addDetails: ''
+      addDetails: '',
     },
     saveAddressData: [],
-    loggedUserInfo: {}
-
+    loggedUserInfo: {},
   });
-
-
 
   return <MainContext.Provider value={{ mainState, setMainState }}>{children}</MainContext.Provider>;
 };

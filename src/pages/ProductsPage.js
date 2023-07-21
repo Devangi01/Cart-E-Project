@@ -5,7 +5,6 @@ import { Container, Stack, Typography, CircularProgress } from '@mui/material';
 import { MainContext } from '../context/MainContext';
 import { ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 
-
 export default function ProductsPage() {
   const { mainState, setMainState } = useContext(MainContext);
   const encodedToken = localStorage.getItem('token');
@@ -34,10 +33,8 @@ export default function ProductsPage() {
           productData: response.data.products,
           storeOriginalProductData: response.data.products,
         });
-        
+
         setIsLoading(false);
-      
-      
       } catch (error) {
         console.log(error);
       }
@@ -57,13 +54,7 @@ export default function ProductsPage() {
           Products
         </Typography>
 
-        <Stack
-          direction="row"
-          flexWrap="wrap-reverse"
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ mb: 5 }}
-        >
+        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar
               openFilter={openFilter}
@@ -75,16 +66,16 @@ export default function ProductsPage() {
         </Stack>
 
         {isLoading ? (
-         <Stack
-         sx={{
-           height: '100vh',
-           alignItems: 'center',
-           justifyContent: 'center',
-         }}
-       >
-        <CircularProgress size={80} />
-       </Stack>
-     ): (
+          <Stack
+            sx={{
+              height: '100vh',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <CircularProgress size={80} />
+          </Stack>
+        ) : (
           <>
             {/* <ProductSort /> */}
             <ProductList products={mainState.productData} />

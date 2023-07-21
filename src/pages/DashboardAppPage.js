@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import the carousel styles
 
@@ -16,19 +17,6 @@ import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
-
-// sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
 
 // ----------------------------------------------------------------------
 const useStyles = makeStyles({
@@ -227,6 +215,7 @@ const useStyles = makeStyles({
 export default function DashboardAppPage() {
   const theme = useTheme();
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const sliderImages = [
     {
@@ -282,7 +271,9 @@ export default function DashboardAppPage() {
       [item]: false,
     });
   };
-
+  const handleCardClick = (clickItem) => {
+    navigate(`/dashboard/products/`);
+  };
   return (
     <>
       <Helmet>
@@ -338,6 +329,7 @@ export default function DashboardAppPage() {
               onMouseEnter={() => handleMouseEnter('shooes')}
               onMouseLeave={() => handleMouseLeave('shooes')}
               style={{ cursor: 'pointer' }}
+              onClick={() => handleCardClick('shooes')}
             >
               <CardMedia
                 component="img"
@@ -359,6 +351,7 @@ export default function DashboardAppPage() {
               onMouseEnter={() => handleMouseEnter('cloth')}
               onMouseLeave={() => handleMouseLeave('cloth')}
               style={{ cursor: 'pointer' }}
+              onClick={() => handleCardClick('clothes')}
             >
               <CardMedia component="img" alt="green iguana" height="280" image="/assets/images/products/cloth_1.jpg" />
               {isHovered.cloth && (
@@ -375,6 +368,7 @@ export default function DashboardAppPage() {
               onMouseEnter={() => handleMouseEnter('jewellery')}
               onMouseLeave={() => handleMouseLeave('jewellery')}
               style={{ cursor: 'pointer' }}
+              onClick={() => handleCardClick('jewellery')}
             >
               <CardMedia component="img" alt="green iguana" height="280" image="/assets/images/products/jw_5.jpg" />
               {isHovered.jewellery && (
