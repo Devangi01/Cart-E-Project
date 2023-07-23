@@ -43,6 +43,12 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
+  console.log('After Redirect:', mainState.showOneProduct);
+  if (mainState.showOneProduct.display) {
+    console.log('Main State', mainState.productData);
+    const filterDAta = mainState.productData.filter((data) => data.category === mainState.showOneProduct.category);
+    console.log('After Filter', filterDAta);
+  }
   return (
     <>
       <Helmet>
@@ -78,7 +84,13 @@ export default function ProductsPage() {
         ) : (
           <>
             {/* <ProductSort /> */}
-            <ProductList products={mainState.productData} />
+            <ProductList
+              products={
+                mainState.showOneProduct.display
+                  ? mainState.productData.filter((data) => data.category === mainState.showOneProduct.category)
+                  : mainState.productData
+              }
+            />
             <ProductCartWidget />
           </>
         )}

@@ -40,6 +40,10 @@ export default function Router() {
       element: <LoginPage />,
     },
     {
+      path: 'logout',
+      element: <Navigate to="/login" />,
+    },
+    {
       element: <SimpleLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },

@@ -1,4 +1,5 @@
 // component
+
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -36,12 +37,11 @@ const navConfig = [
     path: '/login',
     icon: icon('ic_lock'),
   },
-  {
-    title: 'logout',
-    path: '/login',
-    icon: icon('ic_disabled'),
-  },
-
+  // {
+  //   title: 'logout',
+  //   path: '/login',
+  //   icon: icon('ic_disabled'),
+  // },
 ];
 
 export default navConfig;

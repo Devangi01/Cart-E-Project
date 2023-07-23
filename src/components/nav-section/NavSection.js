@@ -1,7 +1,11 @@
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink as RouterLink } from 'react-router-dom';
+
 // @mui
 import { Box, List, ListItemText } from '@mui/material';
+import { MainContext } from '../../context/MainContext';
+
 //
 import { StyledNavItem, StyledNavItemIcon } from './styles';
 
@@ -30,6 +34,8 @@ NavItem.propTypes = {
 };
 
 function NavItem({ item }) {
+  const { mainState, setMainState } = useContext(MainContext);
+
   const { title, path, icon, info } = item;
 
   return (
@@ -46,7 +52,10 @@ function NavItem({ item }) {
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
-      <ListItemText disableTypography primary={title} />
+      <ListItemText
+        disableTypography
+        primary={title === 'login' || title === 'logout' ? (mainState.isLoggedIn ? 'logout' : 'login') : title}
+      />
 
       {info && info}
     </StyledNavItem>

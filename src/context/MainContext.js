@@ -6,7 +6,7 @@ export const MainContext = createContext();
 export const MainProvider = ({ children }) => {
   const [mainState, setMainState] = useState({
     filterState: {
-      category: ['shoes'],
+      category: [],
       price: '',
       rating: '',
     },
@@ -28,7 +28,15 @@ export const MainProvider = ({ children }) => {
     },
     saveAddressData: [],
     loggedUserInfo: {},
+    showOneProduct: {
+      display: false,
+      category: '',
+    },
   });
 
-  return <MainContext.Provider value={{ mainState, setMainState }}>{children}</MainContext.Provider>;
+  const handleLogout = () => {
+    setMainState((prevState) => ({ ...prevState, isLoggedIn: false }));
+  };
+
+  return <MainContext.Provider value={{ mainState, setMainState, handleLogout }}>{children}</MainContext.Provider>;
 };

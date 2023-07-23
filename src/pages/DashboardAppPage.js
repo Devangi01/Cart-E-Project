@@ -15,6 +15,8 @@ import { makeStyles } from '@mui/styles';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
+// import { MainContext } from '../../context/MainContext'; // Adjust the file path accordingly
+import { MainContext } from '../context/MainContext';
 // components
 import Iconify from '../components/iconify';
 
@@ -216,6 +218,7 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
+  const { mainState, setMainState } = useContext(MainContext);
 
   const sliderImages = [
     {
@@ -272,6 +275,14 @@ export default function DashboardAppPage() {
     });
   };
   const handleCardClick = (clickItem) => {
+    const changeState = mainState.showOneProduct;
+    changeState.display = true;
+    changeState.category = clickItem;
+    setMainState({
+      ...mainState,
+      showOneProduct: changeState,
+      filterState: { ...mainState.filterState, category: [...mainState.filterState.category, clickItem] },
+    });
     navigate(`/dashboard/products/`);
   };
   return (
@@ -329,7 +340,7 @@ export default function DashboardAppPage() {
               onMouseEnter={() => handleMouseEnter('shooes')}
               onMouseLeave={() => handleMouseLeave('shooes')}
               style={{ cursor: 'pointer' }}
-              onClick={() => handleCardClick('shooes')}
+              onClick={() => handleCardClick('shoes')}
             >
               <CardMedia
                 component="img"

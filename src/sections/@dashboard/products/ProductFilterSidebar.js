@@ -71,11 +71,10 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
     return sortingData;
   }
 
-  useEffect(() => {
-    jumpToProcessFilterFunction();
-  }, []);
-
   const handleChange = (event, name) => {
+    const resetData = mainState.showOneProduct;
+    resetData.display = false;
+    resetData.categor = '';
     name = name.toLowerCase();
     const getFilterObject = mainState.filterState;
     if (name === 'category' && event.target.checked) {
@@ -85,7 +84,7 @@ export default function ShopFilterSidebar({ openFilter, onOpenFilter, onCloseFil
     } else {
       getFilterObject[name] = event.target.value;
     }
-    setMainState({ ...mainState, getFilterObject });
+    setMainState({ ...mainState, getFilterObject, showOneProduct: resetData });
     jumpToProcessFilterFunction();
   };
 
