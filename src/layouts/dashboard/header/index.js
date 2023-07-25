@@ -96,7 +96,7 @@ export default function Header({ onOpenNav }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
+        {/* <Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
         <Snackbar open={open} autoHideDuration={6000} >
           <Alert severity={mainState.alertBox.type} sx={{ width: '100%' }}>

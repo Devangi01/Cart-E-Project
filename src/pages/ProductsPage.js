@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import { useContext, useEffect, useState } from 'react';
-import { Container, Stack, Typography, CircularProgress } from '@mui/material';
+import { Container, Stack, Typography, CircularProgress, TextField } from '@mui/material';
 import { MainContext } from '../context/MainContext';
 import { ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 
 export default function ProductsPage() {
+  const [searchProduct, setSearchProduct] = useState("")
   const { mainState, setMainState } = useContext(MainContext);
   const encodedToken = localStorage.getItem('token');
   const [openFilter, setOpenFilter] = useState(false);
@@ -48,6 +49,25 @@ export default function ProductsPage() {
     console.log('Main State', mainState.productData);
     const filterDAta = mainState.productData.filter((data) => data.category === mainState.showOneProduct.category);
     console.log('After Filter', filterDAta);
+
+  }
+
+  const handleSearch = (e) => {
+    console.log("Devag",e.target.value)
+        setSearchProduct(e.target.value)
+      const filterData = mainState.storeOriginalProductData.filter(
+          (eachObject) => eachObject.title.includes(searchProduct)
+        );  
+        setMainState({
+          ...mainState,
+          productData: filterData,  
+        });
+        if(e.target.value==='') {
+          setMainState({
+            ...mainState,
+            productData: mainState.storeOriginalProductData,  
+          });
+        }
   }
   return (
     <>
@@ -60,15 +80,25 @@ export default function ProductsPage() {
           Products
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            {/* Add other filter components here */}
-          </Stack>
+        <Stack direction="row" style={{display:"flex",justifyContent:"space-between"}} spacing={1} flexShrink={0} sx={{ my: 1 }}>
+        <TextField
+            name="search"
+            value={searchProduct}
+            id="search-bar"
+            label="Search Products"
+            variant="outlined"
+            size="small"
+            onChange={(event)=>handleSearch(event)}
+            
+            // Add any additional styles if needed
+          />
+          <ProductFilterSidebar
+            openFilter={openFilter}
+            onOpenFilter={handleOpenFilter}
+            onCloseFilter={handleCloseFilter}
+          />
+
+          {/* Add other filter components here */}
         </Stack>
 
         {isLoading ? (
